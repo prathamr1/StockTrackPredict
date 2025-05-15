@@ -1,27 +1,32 @@
-import pandas as pd
-import requests as rq
-import yfinance as yf
-import numpy as np
+from prediction import predict_price
+from plotting import plot_returns
+from compare import plot_compare
 
-stock = yf.Ticker(input("Enter the stock symbol : "))
-data = stock.history(period='1mo')
+def print_preds():
+    actual,predicted = predict_price()
+    print("\n\t\t-Predicted VS Actual Prices")
+    for i in range(min(10,len(actual))):
+        print(f"Actual:{actual[i]:.2f}  |  Predicted:{predicted[i]:.2f}")
 
-data.ffill(inplace=True)#forward filling missing data
-data.index = pd.to_datetime(data.index) #formatting date and time
-data = data.astype(float)
+def show_menu():
+    while True:
+        print("\nStock Price Prediction Menu")
+        print("1. Visualise Stock History along with SMA and Bollinger bands")
+        print("2. Compare Actual and Predicted Price")
+        print("3. Print Predicted vs Actual price values")
+        print("4. Exit")
+        cho = input("Enter Your Choice (1-4): ")
+        if cho=='1':
+            plot_returns()
+        elif cho=='2':
+            plot_compare()
+        elif cho=='3':
+            print_preds()
+        elif cho=='4':
+            print("Exiting..")
+            break;
+        else:
+            print("Invalid Choice")
 
-data['SMA_50'] = data['Close'].rolling(window=50).mean() #calc simple moving avg
-data["EMA_50"] = data['Close'].ewm(span=50, adjust=False).mean() #calc exponential moving avg
-data["Volatility"] = data["Close"].pct_change().rolling(window=10).std() #returns standard deviation
-data['Upper'] = data['SMA_50'] + (data['Close'].rolling(50).std()*2)
-data['Lower'] = data['SMA_50'] - (data['Close'].rolling(50).std()*2)
-#Finding RSI to identify overbought and oversold situations
-delta = data['Close'].diff()
-gain = (delta.where(delta > 0,0)).rolling(window=14).mean()
-loss = (-delta.where(delta < 0,9)).rolling(window=14).mean()
-rs=gain/loss
-data["RSI"] = 100-(100/(1+rs))
-
-corr_mat= data.corr()
-corr_mat['Close'].sort_values(ascending=False)
-print(data)
+if __name__ == "__main__":
+    show_menu()

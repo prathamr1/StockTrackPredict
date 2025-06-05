@@ -1,5 +1,5 @@
 # Overview 
-Stock Price Tracker is a simple and efficient system to check real-time as well as historical prices of stocks from various markets around globe.
+TickerTrek - (Stock Price Tracker) is a simple and efficient system to check real-time as well as historical prices of stocks from various markets around globe.
 
 ## Features  
 - 📈 Fetch real-time stock data  
@@ -15,7 +15,7 @@ Stock Price Tracker is a simple and efficient system to check real-time as well 
 - matplotlib
 
 ## Future Enhancements 
-I'm planning to use Streamlit to deploy this system along with:
+Streamlit for deployment along with:
 
 Multi-API support for better data accuracy
 
